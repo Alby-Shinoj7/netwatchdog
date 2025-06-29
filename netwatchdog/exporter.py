@@ -11,6 +11,7 @@ from .packet_parser import ParsedPacket
 
 
 def export_csv(packets: Iterable[ParsedPacket], path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["timestamp", "protocol", "src", "dst", "sport", "dport"])
@@ -37,4 +38,5 @@ def export_json(packets: Sequence[ParsedPacket], path: Path) -> None:
         }
         for pkt in packets
     ]
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2))
