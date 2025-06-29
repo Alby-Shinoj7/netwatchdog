@@ -29,6 +29,12 @@ python -m netwatchdog.main -i eth0 --capture-time 60
 The tool will capture packets on the specified interface, display live protocol
 counts, and save a PCAP file when stopped.
 
+To analyze an existing PCAP instead of capturing live traffic:
+
+```bash
+python -m netwatchdog.main --pcap-file /path/to/file.pcap
+```
+
 ## Running from source
 
 The `python -m netwatchdog.main` command must either be executed from this

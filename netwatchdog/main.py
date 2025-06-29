@@ -14,7 +14,7 @@ from .cli_dashboard import CLIDashboard
 from .packet_parser import parse_packet
 from .session_tracker import SessionTracker
 from .stats_engine import StatsEngine
-from .storage import save_pcap
+from .storage import save_pcap, load_pcap
 
 logging.basicConfig(
     level=logging.INFO,
@@ -27,6 +27,7 @@ def main() -> None:
     parser = ArgumentParser(description="NetWatchdog - network monitoring tool")
     parser.add_argument("-i", "--interface", help="Network interface", default=config.DEFAULT_INTERFACE)
     parser.add_argument("--capture-time", type=int, default=30, help="Seconds to capture")
+    parser.add_argument("--pcap-file", type=Path, help="Read packets from a PCAP file")
     args = parser.parse_args()
 
     stats = StatsEngine()
@@ -34,6 +35,19 @@ def main() -> None:
     alerts = AlertEngine(stats)
 
     captured: list = []
+
+    if args.pcap_file:
+        for packet in load_pcap(args.pcap_file):
+            parsed = parse_packet(packet)
+            if not parsed:
+                continue
+            captured.append(parsed)
+            stats.update(parsed)
+            sessions.update(parsed)
+            alerts.process(parsed)
+        dashboard = CLIDashboard(stats)
+        dashboard.render()
+        return
 
     def handle_packet(packet: object) -> None:
         parsed = parse_packet(packet)

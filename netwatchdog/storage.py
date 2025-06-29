@@ -6,7 +6,8 @@ import logging
 from pathlib import Path
 from typing import Iterable
 
-from scapy.utils import wrpcap
+from scapy.utils import wrpcap, rdpcap
+from scapy.packet import Packet
 
 from . import config
 from .packet_parser import ParsedPacket
@@ -21,3 +22,10 @@ def save_pcap(packets: Iterable[ParsedPacket], filename: str) -> Path:
     wrpcap(str(path), raw_packets)
     logger.info("Saved PCAP to %s", path)
     return path
+
+
+def load_pcap(path: Path) -> list[Packet]:
+    """Load packets from a PCAP file."""
+    logger.info("Loading PCAP from %s", path)
+    packets = rdpcap(str(path))
+    return list(packets)
