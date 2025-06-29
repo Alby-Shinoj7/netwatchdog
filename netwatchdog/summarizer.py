@@ -6,6 +6,7 @@ import logging
 
 from .stats_engine import StatsEngine
 from .session_tracker import SessionTracker, Session
+from .utils import geoip
 
 try:
     import openai  # type: ignore
@@ -27,8 +28,13 @@ def _build_text_summary(stats: StatsEngine, sessions: SessionTracker) -> str:
     else:
         lines.append("Active sessions:")
         for s in active.values():
+            src_geo = geoip.lookup(s.src)
+            dst_geo = geoip.lookup(s.dst)
+            geo_part = ""
+            if src_geo or dst_geo:
+                geo_part = f" ({src_geo or '?'} -> {dst_geo or '?'})"
             lines.append(
-                f"  {s.src}:{s.sport} -> {s.dst}:{s.dport} "
+                f"  {s.src}:{s.sport} -> {s.dst}:{s.dport}{geo_part} "
                 f"packets={s.packet_count} bytes={s.bytes}"
             )
     return "\n".join(lines)
