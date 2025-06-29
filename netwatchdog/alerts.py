@@ -25,6 +25,6 @@ class AlertEngine:
             logger.warning("New device detected: %s", pkt.src)
             self.known_macs.add(pkt.src)
         # bandwidth check
-        bw = sum(self.stats.bandwidth.get(ts, 0) for ts in self.stats.bandwidth)
+        bw = sum(self.stats.bandwidth.values())
         if bw > self.bandwidth_threshold:
             logger.warning("High bandwidth usage detected: %d bytes", bw)
