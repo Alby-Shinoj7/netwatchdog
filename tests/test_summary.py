@@ -21,6 +21,12 @@ def test_plain_summary(monkeypatch):
         packet_count=1,
         bytes=100,
     )
+    monkeypatch.setattr(
+        "netwatchdog.utils.geoip.lookup",
+        lambda ip: {"1.1.1.1": "A", "2.2.2.2": "B"}.get(ip),
+    )
+
     summary = summarize(stats, sessions)
     assert "TCP: 2" in summary
     assert "1.1.1.1:1234 -> 2.2.2.2:80" in summary
+    assert "A -> B" in summary
