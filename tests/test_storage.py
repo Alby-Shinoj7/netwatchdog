@@ -24,3 +24,15 @@ def test_save_pcap_creates_directory(tmp_path, monkeypatch):
 
     assert path == pcap_dir / filename
     assert path.exists()
+
+
+def test_save_pcap_no_packets(tmp_path, monkeypatch):
+    pcap_dir = tmp_path / "pcap"
+    monkeypatch.setattr(config, "PCAP_DIR", pcap_dir)
+
+    packets: list[DummyPacket] = []
+    filename = "empty.pcap"
+    path = storage.save_pcap(packets, filename)
+
+    assert path == pcap_dir / filename
+    assert not path.exists()
