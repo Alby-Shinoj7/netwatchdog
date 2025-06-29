@@ -28,3 +28,17 @@ python -m netwatchdog.main -i eth0 --capture-time 60
 
 The tool will capture packets on the specified interface, display live protocol
 counts, and save a PCAP file when stopped.
+
+## Running from source
+
+The `python -m netwatchdog.main` command must either be executed from this
+project's root directory or run with `PYTHONPATH` set to include it so that the
+`netwatchdog` package can be located.
+
+```bash
+# from the project root
+python -m netwatchdog.main
+
+# from any other directory
+PYTHONPATH=/path/to/netwatchdog python -m netwatchdog.main
+```
