@@ -15,6 +15,7 @@ from .packet_parser import parse_packet
 from .session_tracker import SessionTracker
 from .stats_engine import StatsEngine
 from .storage import save_pcap, load_pcap
+from .summarizer import summarize
 
 logging.basicConfig(
     level=logging.INFO,
@@ -47,6 +48,7 @@ def main() -> None:
             alerts.process(parsed)
         dashboard = CLIDashboard(stats)
         dashboard.render()
+        print(summarize(stats, sessions))
         return
 
     def handle_packet(packet: object) -> None:
@@ -68,6 +70,7 @@ def main() -> None:
         logger.info("Stopping NetWatchdog")
         capturer.stop()
         dashboard.stop()
+        print(summarize(stats, sessions))
         save_pcap(captured, "capture.pcap")
         exit(0)
 

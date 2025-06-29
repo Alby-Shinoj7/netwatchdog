@@ -13,11 +13,12 @@ terminal.
 - [scapy](https://scapy.net/) for packet capture
 - [rich](https://rich.readthedocs.io/) for the CLI dashboard
 - Optional: `geoip2` for GeoIP lookups
+- Optional: `openai` for AI-generated summaries
 
 Install dependencies using pip:
 
 ```bash
-pip install scapy rich geoip2
+pip install scapy rich geoip2 openai  # optional
 ```
 
 ## Usage
@@ -48,3 +49,11 @@ python -m netwatchdog.main
 # from any other directory
 PYTHONPATH=/path/to/netwatchdog python -m netwatchdog.main
 ```
+
+## Summaries
+
+After processing traffic or analyzing a PCAP, NetWatchdog prints a concise
+summary of observed protocols and active sessions. To generate an AI-powered
+summary instead, install the optional `openai` package and set the environment
+variable `NETWATCHDOG_USE_AI=1`. The OpenAI API key is read from
+`OPENAI_API_KEY`.
